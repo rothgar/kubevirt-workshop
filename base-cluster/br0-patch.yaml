@@ -1,0 +1,16 @@
+version: v1alpha1
+debug: false
+machine:
+  kubelet:
+    disableManifestsDirectory: true
+  network:
+    interfaces:
+      - interface: br0
+        dhcp: true
+        bridge:
+          stp:
+            enabled: true
+          interfaces:
+            - enp3s0
+            - eno1
+            - enp2s0

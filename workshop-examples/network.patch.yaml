@@ -1,0 +1,13 @@
+machine:
+  network:
+    interfaces:
+      - interface: eth0
+        addresses:
+          - 192.168.6.179/22
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.4.1
+            metric: 1024
+        mtu: 1500
+  install:
+    disk: /dev/vda
