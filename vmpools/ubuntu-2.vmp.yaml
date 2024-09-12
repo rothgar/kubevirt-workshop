@@ -2,37 +2,36 @@
 apiVersion: pool.kubevirt.io/v1alpha1
 kind: VirtualMachinePool
 metadata:
-  name: ubuntu
+  name: ubuntu-2core
 spec:
   replicas: 1
   selector:
     matchLabels:
-      kubevirt.io/vmpool: ubuntu
+      kubevirt.io/vmpool: ubuntu-2core
   virtualMachineTemplate:
     metadata:
       creationTimestamp: null
       labels:
-        kubevirt.io/vmpool: ubuntu
+        kubevirt.io/vmpool: ubuntu-2core
     spec:
       running: true
       template:
         metadata:
           creationTimestamp: null
           labels:
-            kubevirt.io/vmpool: ubuntu
+            kubevirt.io/vmpool: ubuntu-2core
         spec:
           architecture: amd64
           domain:
+            cpu:
+              cores: 2
+              sockets: 1
             devices:
               disks:
                 - disk:
                     bus: virtio
                   bootOrder: 1
                   name: containerdisk
-                - disk:
-                    bus: virtio
-                  bootOrder: 2
-                  name: pvc
                 - disk:
                     bus: virtio
                   name: cloudinit
@@ -61,9 +60,6 @@ spec:
               containerDisk:
                 image: docker.io/containercraft/ubuntu:22.04
               name: containerdisk
-            - dataVolume:
-                name: pvc
-              name: pvc
             - name: cloudinit
               cloudInitNoCloud:
                 networkData: |
@@ -102,16 +98,3 @@ spec:
                     - gpg
                     - ca-certificates
                     - apt-transport-https
-      dataVolumeTemplates:
-        - metadata:
-            name: pvc
-          spec:
-            storage:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 20Gi
-            source:
-              http:
-                url: "https://factory.talos.dev/image/79c3d43dd90861d1ffdd379da3e5a6e7fccdb36be434d4b3749ecae8882b08a9/v1.7.6/nocloud-amd64.iso"

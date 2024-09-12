@@ -1,0 +1,12 @@
+apiVersion: v1alpha1
+kind: SideroLinkConfig
+apiUrl: "https://omni-0.siderolabs.dev:8090/?grpc_tunnel=false&jointoken=kcjlZ3vVsJChLE6fcesjj2IspXZOwddsGoLXsSO8dzK"
+---
+apiVersion: v1alpha1
+kind: EventSinkConfig
+endpoint: "[fdae:41e4:649b:9303::1]:8091"
+---
+apiVersion: v1alpha1
+kind: KmsgLogConfig
+name: omni-kmsg
+url: "tcp://[fdae:41e4:649b:9303::1]:8092"

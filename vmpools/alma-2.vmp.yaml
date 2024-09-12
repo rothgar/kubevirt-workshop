@@ -2,27 +2,30 @@
 apiVersion: pool.kubevirt.io/v1alpha1
 kind: VirtualMachinePool
 metadata:
-  name: ubuntu
+  name: alma-2core
 spec:
   replicas: 1
   selector:
     matchLabels:
-      kubevirt.io/vmpool: ubuntu
+      kubevirt.io/vmpool: alma-2core
   virtualMachineTemplate:
     metadata:
       creationTimestamp: null
       labels:
-        kubevirt.io/vmpool: ubuntu
+        kubevirt.io/vmpool: alma-2core
     spec:
       running: true
       template:
         metadata:
           creationTimestamp: null
           labels:
-            kubevirt.io/vmpool: ubuntu
+            kubevirt.io/vmpool: alma-2core
         spec:
           architecture: amd64
           domain:
+            cpu:
+              cores: 2
+              sockets: 1
             devices:
               disks:
                 - disk:
@@ -55,11 +58,11 @@ spec:
                 propagationMethod:
                   qemuGuestAgent:
                     users:
-                      - "ubuntu"
+                      - "alma"
           volumes:
             - dataVolume:
               containerDisk:
-                image: docker.io/containercraft/ubuntu:22.04
+                image: docker.io/containercraft/almalinux:8
               name: containerdisk
             - dataVolume:
                 name: pvc
@@ -79,10 +82,10 @@ spec:
                   disable_root: true
                   chpasswd:
                     list: |
-                      ubuntu:ubuntu
+                      alma:alma
                     expire: False
                   users:
-                    - name: ubuntu
+                    - name: alma
                       shell: /bin/bash
                       lock_passwd: false
                       sudo: ['ALL=(ALL) NOPASSWD:ALL']
@@ -97,11 +100,9 @@ spec:
                   packages:
                     - vim
                     - neofetch
-                    - docker.io
                     - curl
                     - gpg
                     - ca-certificates
-                    - apt-transport-https
       dataVolumeTemplates:
         - metadata:
             name: pvc

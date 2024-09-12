@@ -1,0 +1,132 @@
+kind: Cluster
+name: taloscon
+kubernetes:
+  version: v1.30.4
+talos:
+  version: v1.7.6
+patches:
+  - idOverride: 200-taloscon
+    inline:
+      debug: false
+      machine:
+        network:
+          interfaces:
+            - bridge:
+                interfaces:
+                  - enp3s0
+                  - eno1
+                  - enp2s0
+                stp:
+                  enabled: true
+              dhcp: true
+              interface: br0
+      version: v1alpha1
+  - idOverride: 500-registry-mirror
+    annotations:
+      name: registry-mirror
+    inline:
+      machine:
+        registries:
+          mirrors:
+            docker.io:
+              endpoints:
+                - http://127.0.0.1:30000
+            gcr.io:
+              endpoints:
+                - http://127.0.0.1:30003
+            ghcr.io:
+              endpoints:
+                - http://127.0.0.1:30001
+            registry.k8s.io:
+              endpoints:
+                - http://127.0.0.1:30002
+  - idOverride: 500-cp-schedule
+    annotations:
+      name: schedule-cp
+    inline:
+      cluster:
+        allowSchedulingOnControlPlanes: true
+  - idOverride: 500-kubespan
+    annotations:
+      name: kubespan
+    inline:
+      machine:
+        network:
+          kubespan:
+            enabled: true
+  - idOverride: 500-cert-rotate
+    annotations:
+      name: cert-rotation
+    inline:
+      machine:
+        kubelet:
+          extraArgs:
+            rotate-server-certificates: true
+---
+kind: ControlPlane
+machines:
+  - 6ad2ae00-11cb-11ef-83fc-64bc3f0e2e00
+---
+kind: Workers
+machines:
+  - 0564bde4-47b8-c3bd-79e6-63e7a2badf27
+  - 141d0300-c52a-0350-9d14-2ac500031d14
+  - 141d0300-cf2a-0350-9d14-2acf00031d14
+  - 141d0300-dd2a-0350-9d14-2add00031d14
+  - 141d0300-e26a-0350-9d14-6ae200031d14
+---
+kind: Machine
+name: 0564bde4-47b8-c3bd-79e6-63e7a2badf27
+patches:
+  - name: hostname
+    inline:
+      machine:
+        network:
+          hostname: z
+---
+kind: Machine
+name: 141d0300-c52a-0350-9d14-2ac500031d14
+patches:
+  - name: hostname
+    inline:
+      machine:
+        network:
+          hostname: never
+---
+kind: Machine
+name: 141d0300-cf2a-0350-9d14-2acf00031d14
+patches:
+  - name: hostname
+    inline:
+      machine:
+        network:
+          hostname: up
+---
+kind: Machine
+name: 141d0300-dd2a-0350-9d14-2add00031d14
+patches:
+  - name: hostname
+    inline:
+      machine:
+        network:
+          hostname: give-you
+---
+kind: Machine
+systemExtensions:
+  - siderolabs/intel-ucode
+name: 141d0300-e26a-0350-9d14-6ae200031d14
+patches:
+  - name: hostname
+    inline:
+      machine:
+        network:
+          hostname: gonna
+---
+kind: Machine
+name: 6ad2ae00-11cb-11ef-83fc-64bc3f0e2e00
+patches:
+  - name: hostname
+    inline:
+      machine:
+        network:
+          hostname: mini

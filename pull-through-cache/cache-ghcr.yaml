@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghcr-registry-cache
+  namespace: cache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ghcr-registry-cache
+  template:
+    metadata:
+      labels:
+        app: ghcr-registry-cache
+    spec:
+      containers:
+        - name: registry
+          image: registry:2
+          env:
+            - name: REGISTRY_PROXY_REMOTEURL
+              value: https://ghcr.io
+          ports:
+            - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ghcr-registry-cache-service
+  namespace: cache
+spec:
+  type: NodePort
+  selector:
+    app: ghcr-registry-cache
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30001

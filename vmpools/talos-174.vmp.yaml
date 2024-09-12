@@ -28,7 +28,7 @@ spec:
                 - disk:
                     bus: virtio
                   bootOrder: 1
-                  name: talos176
+                  name: talos174
               interfaces:
                 - name: eth0
                   bridge: {}
@@ -42,11 +42,11 @@ spec:
           terminationGracePeriodSeconds: 0
           volumes:
             - dataVolume:
-                name: talos176
-              name: talos176
+                name: talos174
+              name: talos174
       dataVolumeTemplates:
         - metadata:
-            name: talos176
+            name: talos174
           spec:
             storage:
               accessModes:

@@ -1,0 +1,18 @@
+machine:
+  network:
+    kubespan:
+      enabled: true
+    interfaces:
+      - bridge:
+          interfaces:
+            - enp2s0
+            - enp3s0
+            - eno1
+          stp:
+            enabled: true
+        dhcp: true
+        interface: br0
+cluster:
+  allowSchedulingOnControlPlanes: true
+  apiServer:
+    disablePodSecurityPolicy: true

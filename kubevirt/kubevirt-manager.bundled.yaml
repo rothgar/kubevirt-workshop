@@ -58,7 +58,7 @@ spec:
                 http:
                   type: object
                   properties:
-                    url: 
+                    url:
                       type: string
                 registry:
                   type: object
@@ -95,8 +95,8 @@ spec:
     singular: image
     kind: Image
     shortNames:
-    - img
-    
+      - img
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -110,7 +110,16 @@ rules:
     resources: ["customresourcedefinitions"]
     verbs: ["get", "list"]
   - apiGroups: [""]
-    resources: ["persistentvolumeclaims", "persistentvolumes", "services", "secrets", "serviceaccounts", "configmaps", "deployments"]
+    resources:
+      [
+        "persistentvolumeclaims",
+        "persistentvolumes",
+        "services",
+        "secrets",
+        "serviceaccounts",
+        "configmaps",
+        "deployments",
+      ]
     verbs: ["*"]
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["rolebindings"]
@@ -135,7 +144,7 @@ rules:
     verbs: ["get", "list", "update", "patch"]
   - apiGroups: ["instancetype.kubevirt.io"]
     resources: ["*"]
-    verbs: ["*"] 
+    verbs: ["*"]
   - apiGroups: ["cdi.kubevirt.io"]
     resources: ["*"]
     verbs: ["*"]
@@ -180,9 +189,9 @@ roleRef:
   kind: ClusterRole
   name: kubevirt-manager
 subjects:
-- kind: ServiceAccount
-  name: kubevirt-manager
-  namespace: kubevirt-manager
+  - kind: ServiceAccount
+    name: kubevirt-manager
+    namespace: kubevirt-manager
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -216,9 +225,9 @@ roleRef:
   kind: ClusterRole
   name: kubevirt-manager-kccm
 subjects:
-- kind: ServiceAccount
-  name: kubevirt-manager
-  namespace: kubevirt-manager
+  - kind: ServiceAccount
+    name: kubevirt-manager
+    namespace: kubevirt-manager
 
 ---
 kind: ClusterRole
@@ -227,99 +236,99 @@ metadata:
   name: kubevirt-manager-cas-workload
 rules:
   - apiGroups:
-    - ""
+      - ""
     resources:
-    - namespaces
-    - persistentvolumeclaims
-    - persistentvolumes
-    - pods
-    - replicationcontrollers
-    - services
+      - namespaces
+      - persistentvolumeclaims
+      - persistentvolumes
+      - pods
+      - replicationcontrollers
+      - services
     verbs:
-    - get
-    - list
-    - watch
+      - get
+      - list
+      - watch
   - apiGroups:
-    - ""
+      - ""
     resources:
-    - nodes
+      - nodes
     verbs:
-    - get
-    - list
-    - update
-    - watch
+      - get
+      - list
+      - update
+      - watch
   - apiGroups:
-    - ""
+      - ""
     resources:
-    - pods/eviction
+      - pods/eviction
     verbs:
-    - create
+      - create
   - apiGroups:
-    - policy
+      - policy
     resources:
-    - poddisruptionbudgets
+      - poddisruptionbudgets
     verbs:
-    - list
-    - watch
+      - list
+      - watch
   - apiGroups:
-    - storage.k8s.io
+      - storage.k8s.io
     resources:
-    - csinodes
-    - storageclasses
-    - csidrivers
-    - csistoragecapacities
+      - csinodes
+      - storageclasses
+      - csidrivers
+      - csistoragecapacities
     verbs:
-    - get
-    - list
-    - watch
+      - get
+      - list
+      - watch
   - apiGroups:
-    - batch
+      - batch
     resources:
-    - jobs
+      - jobs
     verbs:
-    - list
-    - watch
+      - list
+      - watch
   - apiGroups:
-    - apps
+      - apps
     resources:
-    - daemonsets
-    - replicasets
-    - statefulsets
+      - daemonsets
+      - replicasets
+      - statefulsets
     verbs:
-    - list
-    - watch
+      - list
+      - watch
   - apiGroups:
-    - ""
+      - ""
     resources:
-    - events
+      - events
     verbs:
-    - create
-    - patch
+      - create
+      - patch
   - apiGroups:
-    - ""
+      - ""
     resources:
-    - configmaps
+      - configmaps
     verbs:
-    - create
-    - delete
-    - get
-    - update
+      - create
+      - delete
+      - get
+      - update
   - apiGroups:
-    - coordination.k8s.io
+      - coordination.k8s.io
     resources:
-    - leases
+      - leases
     verbs:
-    - create
-    - get
-    - update
+      - create
+      - get
+      - update
   - apiGroups:
-    - ""
+      - ""
     resources:
-    - secrets
+      - secrets
     verbs:
-    - get
-    - list
-    - watch
+      - get
+      - list
+      - watch
 
 ---
 kind: ClusterRole
@@ -328,30 +337,30 @@ metadata:
   name: kubevirt-manager-cas-management
 rules:
   - apiGroups:
-    - cluster.x-k8s.io
+      - cluster.x-k8s.io
     resources:
-    - machinedeployments
-    - machinedeployments/scale
-    - machines
-    - machinesets
-    - machinepools
+      - machinedeployments
+      - machinedeployments/scale
+      - machines
+      - machinesets
+      - machinepools
     verbs:
-    - get
-    - list
-    - update
-    - watch
+      - get
+      - list
+      - update
+      - watch
   - apiGroups:
-    - infrastructure.cluster.x-k8s.io
+      - infrastructure.cluster.x-k8s.io
     resources:
-    - kubevirtcluster
-    - kubevirtmachinetemplate
-    - kubevirtmachinetemplates
+      - kubevirtcluster
+      - kubevirtmachinetemplate
+      - kubevirtmachinetemplates
     verbs:
-    - get
-    - list
-    - update
-    - watch
-    
+      - get
+      - list
+      - update
+      - watch
+
 ---
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
@@ -406,24 +415,24 @@ spec:
           image: kubevirtmanager/kubevirt-manager:1.4.0
           imagePullPolicy: IfNotPresent
           ports:
-          - name: http
-            containerPort: 8080
+            - name: http
+              containerPort: 8080
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             runAsUser: 10000
             runAsGroup: 30000
           volumeMounts:
-          - name: cache-volume
-            mountPath: /var/cache/nginx
-          - name: run-volume
-            mountPath: /var/run
-          - name: auth-config
-            mountPath: /etc/nginx/auth.d/
-          - name: auth-secret
-            mountPath: /etc/nginx/secret.d/
-          - name: prometheus-config
-            mountPath: /etc/nginx/location.d/
+            - name: cache-volume
+              mountPath: /var/cache/nginx
+            - name: run-volume
+              mountPath: /var/run
+            - name: auth-config
+              mountPath: /etc/nginx/auth.d/
+            - name: auth-secret
+              mountPath: /etc/nginx/secret.d/
+            - name: prometheus-config
+              mountPath: /etc/nginx/location.d/
       serviceAccountName: kubevirt-manager
       restartPolicy: Always
       volumes:
@@ -454,10 +463,11 @@ metadata:
     app: kubevirt-manager
     kubevirt-manager.io/version: 1.4.0
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: kubevirt-manager
   ports:
     - protocol: TCP
       port: 8080
       targetPort: 8080
+

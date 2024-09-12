@@ -2,39 +2,45 @@
 apiVersion: pool.kubevirt.io/v1alpha1
 kind: VirtualMachinePool
 metadata:
-  name: talos
+  name: omni
 spec:
   replicas: 1
   selector:
     matchLabels:
-      kubevirt.io/vmpool: talos
+      kubevirt.io/vmpool: omni
   virtualMachineTemplate:
     metadata:
       creationTimestamp: null
       labels:
-        kubevirt.io/vmpool: talos
+        kubevirt.io/vmpool: omni
     spec:
       running: true
       template:
         metadata:
           creationTimestamp: null
           labels:
-            kubevirt.io/vmpool: talos
+            kubevirt.io/vmpool: omni
         spec:
           architecture: amd64
           domain:
+            cpu:
+              cores: 2
+              sockets: 1
             devices:
               disks:
                 - disk:
                     bus: virtio
                   bootOrder: 1
-                  name: talos176
+                  name: containerdisk
+                - disk:
+                    bus: virtio
+                  name: cloudinit
               interfaces:
                 - name: eth0
                   bridge: {}
             resources:
               requests:
-                memory: 2Gi
+                memory: 4Gi
           networks:
             - name: eth0
               multus:
@@ -42,19 +48,10 @@ spec:
           terminationGracePeriodSeconds: 0
           volumes:
             - dataVolume:
-                name: talos176
-              name: talos176
-      dataVolumeTemplates:
-        - metadata:
-            name: talos176
-          spec:
-            storage:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 10Gi
-            source:
-              http:
-                #url: "http://mirror/nocloud-amd64.raw.xz"
-                url: "https://factory.talos.dev/image/79c3d43dd90861d1ffdd379da3e5a6e7fccdb36be434d4b3749ecae8882b08a9/v1.7.6/nocloud-amd64.raw.xz"
+              containerDisk:
+                image: docker.io/containercraft/ubuntu:22.04
+              name: containerdisk
+            - name: cloudinit
+              cloudInitNoCloud:
+                secretRef:
+                  name: omni-cloud-init

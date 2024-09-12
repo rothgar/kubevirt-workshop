@@ -1,0 +1,56 @@
+apiVersion: pool.kubevirt.io/v1alpha1
+kind: VirtualMachinePool
+metadata:
+  name: talos
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      kubevirt.io/vmpool: talos
+  virtualMachineTemplate:
+    metadata:
+      labels:
+        kubevirt.io/vmpool: talos
+    spec:
+      running: true
+      template:
+        metadata:
+          labels:
+            kubevirt.io/vmpool: talos
+        spec:
+          networks:
+            - name: eth0
+              multus:
+                networkName: br0
+          domain:
+            cpu:
+              cores: 2
+            resources:
+              requests:
+                memory: 4Gi
+            devices:
+              interfaces:
+                - name: eth0
+                  bridge: {}
+              disks:
+                - name: talos-root-disk
+                  bootOrder: 1
+                  disk:
+                    bus: virtio
+          volumes:
+            - name: talos-root-disk
+              dataVolume:
+                name: talos-root-dv
+      dataVolumeTemplates:
+        - metadata:
+            name: talos-root-dv
+          spec:
+            storage:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 8Gi
+            source:
+              registry:
+                url: "docker://docker.io/containercraft/talos:1.7.4"
