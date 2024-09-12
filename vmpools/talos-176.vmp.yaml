@@ -1,22 +1,22 @@
 apiVersion: pool.kubevirt.io/v1alpha1
 kind: VirtualMachinePool
 metadata:
-  name: talos
+  name: talos-176
 spec:
   replicas: 3
   selector:
     matchLabels:
-      kubevirt.io/vmpool: talos
+      kubevirt.io/vmpool: talos-176
   virtualMachineTemplate:
     metadata:
       labels:
-        kubevirt.io/vmpool: talos
+        kubevirt.io/vmpool: talos-176
     spec:
       running: true
       template:
         metadata:
           labels:
-            kubevirt.io/vmpool: talos
+            kubevirt.io/vmpool: talos-176
         spec:
           networks:
             - name: eth0
@@ -53,4 +53,4 @@ spec:
                   storage: 8Gi
             source:
               registry:
-                url: "docker://docker.io/containercraft/talos:1.7.4"
+                url: "docker://docker.io/containercraft/talos:1.7.6"
