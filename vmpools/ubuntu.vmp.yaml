@@ -2,24 +2,24 @@
 apiVersion: pool.kubevirt.io/v1alpha1
 kind: VirtualMachinePool
 metadata:
-  name: ubuntu-2core
+  name: ubuntu
 spec:
   replicas: 1
   selector:
     matchLabels:
-      kubevirt.io/vmpool: ubuntu-2core
+      kubevirt.io/vmpool: ubuntu
   virtualMachineTemplate:
     metadata:
       creationTimestamp: null
       labels:
-        kubevirt.io/vmpool: ubuntu-2core
+        kubevirt.io/vmpool: ubuntu
     spec:
       running: true
       template:
         metadata:
           creationTimestamp: null
           labels:
-            kubevirt.io/vmpool: ubuntu-2core
+            kubevirt.io/vmpool: ubuntu
         spec:
           architecture: amd64
           domain:
@@ -46,15 +46,6 @@ spec:
               multus:
                 networkName: br0
           terminationGracePeriodSeconds: 0
-          accessCredentials:
-            - sshPublicKey:
-                source:
-                  secret:
-                    secretName: user-kc2-sshpubkey
-                propagationMethod:
-                  qemuGuestAgent:
-                    users:
-                      - "ubuntu"
           volumes:
             - dataVolume:
               containerDisk:
